@@ -1,0 +1,817 @@
+
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #181818;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .box {
+            position: relative;
+            width: 300px;
+            min-width: 300px;
+            height: 550px;
+            display: flex;
+            justify-content: center;
+            color: white;
+            border: 8px solid black;
+            overflow: hidden;
+            border-radius: 40px;
+            transform-style: preserve-3d;
+            box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.79);
+            perspective: 1000;
+           
+        }
+      
+
+        /* 主屏背景 */
+        .container {
+            width: inherit;
+            background: url("../images/bgpicture.jpg") no-repeat;
+            background-size: cover;
+            background-position-y: -65px;
+            transform-style: preserve-3d;
+            transform: translateZ(-120px) scale(1.3);
+        }
+
+        .box .selectSetup {
+            position: absolute;
+            top: -100%;
+            width: 100%;
+            height: 100%;
+            z-index: 99997;
+            background-color: rgba(255,255,255, .2);
+            backdrop-filter: blur(40px);
+        }
+
+        /* 头部信息显示 */
+        .info {
+            position: absolute;
+            width: 100%;
+            height: 28px;
+            background-color: rgba(0, 0, 0, .5);
+            z-index: 999999;
+            border-radius: 8px;
+            line-height: 28px;
+            color: rgb(224, 221, 221);
+            cursor: grab;
+            /* 抓取 */
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .info:active {
+            cursor: grabbing;
+            /* 正在抓取 */
+        }
+
+        .info .time {
+            position: absolute;
+            left: 25px;
+            user-select: none;
+            font-weight: 800;
+        }
+
+        .info .wifi {
+            position: absolute;
+            right: 50px;
+            height: 15px;
+            font-size: 0;
+        }
+
+        /* 时间 */
+        .info .wifi span {
+            position: absolute;
+            top: -5px;
+            left: -20px;
+            font-size: 10px;
+            user-select: none;
+            z-index: 99999;
+        }
+
+        .info .wifi i {
+            position: absolute;
+            top: 2px;
+            width: 18px;
+            height: 15px;
+            display: inline-block;
+            background: url(./images/ios15-wifi-icon.png) no-repeat;
+            background-size: cover;
+            filter: grayscale();
+        }
+
+        /* 电量 */
+        .info .power {
+            position: absolute;
+            right: 10px;
+            width: 20px;
+            height: 10px;
+            border-radius: 5px;
+            border: 1px solid rgb(175, 176, 175);
+            cursor: pointer;
+        }
+
+        .info .power .con {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 闪电图标 */
+        .info .power .con>img {
+            width: 5px;
+            height: 8px;
+            z-index: 9999;
+            transform: rotate(25deg);
+            opacity: 0;
+        }
+
+        /* 电量进度条 */
+        .info .power .con>span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-color: rgb(21, 255, 111);
+            width: 50%;
+            height: 8px;
+            z-index: 9998;
+        }
+
+        /* 显示电量 */
+        .info .power>span {
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            padding: 2px 10px;
+            z-index: 9999;
+            color: white;
+            background-color: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(30px);
+            text-align: center;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .info .power:hover span {
+            display: block;
+        }
+
+        /* 头部刘海 */
+        .title {
+            width: 140px;
+            height: 28px;
+            position: absolute;
+            background-color: black;
+            border-bottom-left-radius: 22px;
+            border-bottom-right-radius: 22px;
+            z-index: 999999;
+        }
+
+        .title .line {
+            width: 70px;
+            height: 7px;
+            background-color: rgb(35, 35, 35);
+            position: absolute;
+            top: 7px;
+            left: 25px;
+            border: 1px solid rgb(58, 57, 57);
+            border-radius: 50px;
+        }
+
+        .title .dot {
+            width: 9px;
+            height: 9px;
+            background-color: rgb(23, 22, 22);
+            border: 1px solid rgb(58, 57, 57);
+            position: absolute;
+            top: 6px;
+            right: 24px;
+            border-radius: 50px;
+        }
+
+        /* 电话区域 */
+        .content {
+            position: absolute;
+            z-index: 99995;
+            width: inherit;
+            height: inherit;
+            display: flex;
+            justify-content: center;
+            backdrop-filter: blur(15px);
+            display: none;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            top: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            user-select: none;
+            border: 3px solid #d69a85;
+        }
+
+        .logo>img {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            transition: all .3s linear;
+        }
+
+        .logo>img:hover {
+            transform: scale(1.2);
+        }
+
+        h1 {
+            position: absolute;
+            top: 220px;
+            font-size: 40px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        p {
+            display: block;
+            height: 20px;
+            font-size: 10px;
+            position: absolute;
+            top: 275px;
+            user-select: none;
+        }
+
+        .select {
+            width: 100%;
+            height: 60px;
+            position: absolute;
+            bottom: 100px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .select .yes,
+        .select .no {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            user-select: none;
+            transition: transform .3s ease-in-out;
+            position: relative;
+        }
+
+        img {
+            width: 50px;
+            position: absolute;
+        }
+
+        .select .yes {
+            background-color: rgb(37, 202, 64);
+
+        }
+
+        .select .yes:hover,
+        .select .no:hover {
+            transform: scale(1.1);
+        }
+
+        .select .yes>img {
+            width: 30px;
+            height: 40px;
+            top: 11px;
+            left: 15px;
+        }
+
+        .select .no {
+            background-color: rgb(250, 89, 94);
+        }
+
+        .select .no>img {
+            top: 20px;
+            left: 3px;
+        }
+
+        /* 底部线 */
+        .box>.line {
+            width: 100px;
+            height: 5px;
+            background-color: rgb(253, 251, 251);
+            position: absolute;
+            bottom: 5px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all .1s linear;
+            z-index: 99999;
+            display: none;
+        }
+
+        .box>.line:hover {
+            transform: translateY(-10px);
+        }
+
+        .controller {
+            position: absolute;
+            left: 0px;
+            top: 200px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(34, 41, 56, 0);
+            border-radius: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 99999;
+        }
+
+        .controller::before {
+            content: "";
+            width: 51px;
+            height: 51px;
+            position: absolute;
+            background-color: rgb(75, 83, 90);
+            border-radius: 50%;
+        }
+
+        .controller::after {
+            content: "";
+            width: 36px;
+            height: 36px;
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            border: 4px solid rgb(141, 144, 145);
+
+        }
+
+        /* 控制器弹出层 */
+        .popup {
+            position: absolute;
+            top: 20%;
+            width: 240px;
+            height: 240px;
+            background-color: rgba(0, 0, 0, .6);
+            border-radius: 40px;
+            backdrop-filter: blur(30px);
+            transition: all .2s linear;
+            z-index: 99999;
+            display: none;
+        }
+
+        .popup .item {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            border: 1px solid rgb(239, 233, 154);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        .popup .item:nth-of-type(1) {
+            left: calc(50% - 30px);
+            top: 15px;
+        }
+
+        .popup .item:nth-of-type(2) {
+            left: 20px;
+            top: 55px;
+        }
+
+        .popup .item:nth-of-type(3) {
+            left: 20px;
+            bottom: 55px;
+        }
+
+        .popup .item:nth-of-type(4) {
+            left: calc(50% - 30px);
+            bottom: 18px;
+        }
+
+        .popup .item:nth-of-type(4)>.controller {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .popup .item:nth-of-type(5) {
+            right: 20px;
+            bottom: 55px;
+        }
+
+        .popup .item:nth-of-type(6) {
+            right: 20px;
+            top: 55px;
+        }
+
+
+        /* 图库区域 */
+        .box .albumArea {
+            position: absolute;
+            width: 300px;
+            height: 100%;
+            display: none;
+            z-index: 99995;
+            backdrop-filter: blur(15px);
+        }
+
+        .box .albumArea .pics {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 97%;
+            border: 1px solid white;
+            overflow: overlay;
+        }
+
+        /* 设置滚动条样式 */
+        /* 滚动条整体样式 */
+        .box .albumArea .pics::-webkit-scrollbar {
+            width: 14px;
+            height: 10px;
+        }
+
+        /* 滚动条滑块样式 */
+        .box .albumArea .pics::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0px 0px 10px rgba(104, 103, 103, 0.963);
+        }
+
+        /* 轨道样式 */
+        .box .albumArea .pics::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 20px 0px 10px rgba(0, 0, 0, .4);
+            border-radius: 10px;
+        }
+
+        .box .albumArea .pics>ul {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            padding-top: 28px;
+            list-style: none;
+            overflow: hidden;
+        }
+
+        .box .albumArea .pics>ul li {
+            position: relative;
+            width: 120px;
+            height: 200px;
+            border: 3px solid #d9fffe;
+            border-radius: 20px;
+            margin: 4px 0;
+            overflow: hidden;
+            box-shadow: 0 0 5px white;
+        }
+
+        .box .albumArea .pics>ul li>img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            transition: all .4s linear;
+            cursor: pointer;
+        }
+
+        .box .albumArea .pics>ul li>img:hover {
+            transform: scale(1.3);
+        }
+
+        /* 音乐模块 */
+        .box .musicArea {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            background-color: rgba(255, 255, 255, .8);
+            backdrop-filter: blur(30px);
+            z-index: 99995;
+            overflow: auto;
+            display: none;
+        }
+
+        .box .musicArea .musicList {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 18px 0;
+
+        }
+
+        .box .musicArea .musicList audio {
+            width: 250px;
+            height: 50px;
+            margin: 10px;
+        }
+
+        /* 底部导航栏 */
+        .nav {
+            position: absolute;
+            bottom: 10px;
+            width: 270px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, .4);
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            /* display: none; */
+        }
+
+        .nav .item {
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgb(216, 151, 151);
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .nav .item.tel {
+            background: url("../images/tel.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.album {
+            background: url("../images/album.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.music {
+            background: url("../images/qq_music.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.we_chat {
+            background: url("../images/we_chat.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+
+        /* 桌面滑动区域 */
+        .Desktop_slide_area {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            width: 100%;
+            height: 435px;
+            border-radius: 20px;
+            /* border: 3px dashed rgb(54, 234, 81); */
+        }
+
+        .Desktop_slide_area>ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: 410px;
+            border-radius: inherit;
+            list-style: none;
+        }
+
+        .Desktop_slide_area ul li {
+            position: absolute;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            border-radius: inherit;
+            padding: 10px;
+            /* background-color: rgba(255,255,255,.5);     */
+            transform: translate(calc(var(--i) * 280px));
+        }
+
+        /* 行  */
+        .Desktop_slide_area ul li .line {
+            width: 100%;
+            height: 50px;
+            margin: 10px 0;
+            /* display: flex;
+            justify-content: space-between; */
+            /* border: 1px solid #4ae193; */
+        }
+
+        /* 列 */
+        .Desktop_slide_area ul li .line .item {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px 2px white;
+            float: left;
+            margin: 0 8px;
+            transition: all .2s linear;
+        }
+
+        .Desktop_slide_area ul li .line .item:hover {
+            transform: scale(1.1);
+        }
+
+        /* 相机 */
+        .Desktop_slide_area ul li .line_1 .item_camera {
+            background: url('../images/camera.png') no-repeat 0;
+            background-size: cover;
+        }
+
+        .box .cameraArea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            backdrop-filter: blur(20px);
+            z-index: 9995;
+            display: none;
+
+        }
+
+        .box .cameraArea #video {
+            width: 284px;
+            height: 290px;
+            object-fit: fill;
+            margin-top: 30px;
+            border: 3px solid #75db8f;
+            border-radius: 20px;
+            margin: 40% 0;
+        }
+
+        /* 计算器 */
+        .Desktop_slide_area ul li .line_1 .item_calculator {
+            background: url('../images/calculator.png') no-repeat 0;
+            background-size: cover;
+        }
+
+        /* 计算器 */
+        .calculator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(34, 36, 51);
+            z-index: 99995;
+            display: none;
+        }
+
+        .calculator .calc {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            width: 100%;
+            height: 505px;
+            /* border: 3px dashed rgb(59, 224, 59); */
+            border-radius: 14px;
+        }
+
+        /* 主题切换 */
+        .calculator .calc .themeToggle {
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 43px);
+            width: 86px;
+            height: 35px;
+            background-color: rgb(41, 43, 55);
+            border-radius: 10px;
+            z-index: 99999;
+        }
+
+        .calculator .calc .themeToggle img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            top: 3px;
+        }
+
+        .calculator .calc .themeToggle img:nth-of-type(1) {
+            left: 8px;
+        }
+
+        .calculator .calc .themeToggle img:nth-of-type(2) {
+            right: 8px;
+        }
+
+        .calculator .calc .panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+
+        }
+
+        .calculator .calc .panel .num_line {
+            position: absolute;
+            top: 50px;
+            width: 100%;
+            height: 150px;
+            /* border: 2px solid rgb(59, 223, 59); */
+            /* overflow: hidden; */
+
+        }
+
+        .calculator .calc .panel .num_line .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            transition: all .3s linear;
+        }
+
+        .calculator .calc .panel .num_line p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0 10px;
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            line-height: 50px;
+            color: white;
+            font-size: 20px;
+            /* box-shadow: inset 0 0 8px 1px white; */
+        }
+
+        .calculator .calc .panel .num_line p:nth-of-type(1) {
+            top: 0;
+        }
+
+        .calculator .calc .panel .num_line p:nth-of-type(2) {
+            top: 50px;
+        }
+
+        .calculator .calc .digitalArea {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            background-color: rgb(41, 43, 55);
+        }
+
+        .calculator .calc .digitalArea table {
+            position: absolute;
+            width: inherit;
+            height: 305px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+
+        }
+
+        .digitalArea table tr td {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 25px;
+            border-radius: 10px;
+            transition: all .2s linear;
+            border: 1px solid transparent;
+        }
+
+        .digitalArea table tr td:hover {
+            box-shadow: inset 0 0 10px 2px white;
+
+        }
+
+        .digitalArea table tr {
+            width: 100%;
+            height: 50px;
+
+        }
+    

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img {
+            width: 300px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="myfile" onchange="getInfo(this)">
+    <div id="content"></div>
+    <script>
+        let myfile = document.getElementById("myfile");
+        let fReader = new FileReader();
+        let con = document.getElementById("content");
+        fReader.onload = function(e) {
+            // 以图片的形式放到div中
+            con.innerHTML = "";
+            e.target.result
+            var str= '<img src="'+ e.target.result +'">';
+            con.innerHTML += str;
+        }
+        function getInfo(node) {
+            // myfile.files[0];
+            fReader.readAsDataURL(myfile.files[0]);
+           
+            // console.log(node.files[0]);
+            // // 创建一个 FileReader 对象
+            // let fr = new FileReader();
+            // // 调用读取文件方法
+            // fr.readAsDataURL(node.files[0]);
+            // // 一个事件表示监听读取成功
+            // fr.onload = function(e) {
+            //     console.log(e);
+            //     console.log(e.target.result);
+            // }
+        }
+    </script>
+</body>
+</html>

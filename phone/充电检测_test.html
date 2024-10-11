@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 100px;
+            border: 2px solid #000;
+            margin: 100px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .power {
+            width: 80px;
+            height: 30px;
+            border-radius: 20px;
+            border: 2px solid #000;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .power span {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: rgb(74, 235, 74);
+            height: 100%;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        img {
+            width: 13px;
+            height: 25px;
+            z-index: 9999;
+            transform: rotate(20deg);
+            display: "none";
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="power">
+            <img src="images/pow.png" alt="">
+            <span></span>
+        </div>
+    </div>
+    <script>
+
+        navigator.getBattery().then(function (battery) {
+            // 当前剩余电量
+            // console.log("Battery level: " + battery.level * 100 + "%");
+            // 剩余电量
+            // 检测是否在充电
+            let powers = battery.level * 100 + "%";
+            console.log("剩余电量：" + powers);
+            // battery.addEventListener("chargingchange", function () {
+            //     let str = battery.charging ? "yes" : "no";
+            // });
+
+            battery.addEventListener("levelchange", function () {
+                console.log("Battery level: " + battery.level * 100 + "%");
+            });
+            let span = document.querySelector("span");
+            let img = document.querySelector("img");
+            span.style.width = powers
+            // 是否正在充电，yes-充电
+            console.log("Battery charging? " + (battery.charging ? "yes" : "no"));
+            
+            let k = battery.charging ? "yes" : "no";
+            if (k == "yes") {
+                console.log("正在充电");
+                img.style.display= "block";
+            } else {
+                console.log("断开电源");
+
+                img.style.display= "none";
+
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

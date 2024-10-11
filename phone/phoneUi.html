@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1e1d1f;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .box {
+            position: relative;
+            width: 300px;
+            min-width: 300px;
+            height: 550px;
+            display: flex;
+            justify-content: center;
+            color: white;
+            border: 8px solid black;
+            overflow: hidden;
+            border-radius: 40px;
+            transform-style: preserve-3d;
+            box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.79);
+            perspective: 1000;
+           
+        }
+      
+
+        /* 主屏背景 */
+        .container {
+            width: inherit;
+            background: url("./images/bgpicture.jpg") no-repeat;
+            background-size: cover;
+            background-position-y: -65px;
+            transform-style: preserve-3d;
+            transform: translateZ(-120px) scale(1.3);
+        }
+
+        .box .selectSetup {
+            position: absolute;
+            top: -100%;
+            width: 100%;
+            height: 100%;
+            z-index: 99997;
+            background-color: rgba(255,255,255, .2);
+            backdrop-filter: blur(40px);
+        }
+
+        /* 头部信息显示 */
+        .info {
+            position: absolute;
+            width: 100%;
+            height: 28px;
+            background-color: rgba(0, 0, 0, .5);
+            z-index: 999999;
+            border-radius: 8px;
+            line-height: 28px;
+            color: rgb(224, 221, 221);
+            cursor: grab;
+            /* 抓取 */
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .info:active {
+            cursor: grabbing;
+            /* 正在抓取 */
+        }
+
+        .info .time {
+            position: absolute;
+            left: 25px;
+            user-select: none;
+            font-weight: 800;
+        }
+
+        .info .wifi {
+            position: absolute;
+            right: 50px;
+            height: 15px;
+            font-size: 0;
+        }
+
+        /* 时间 */
+        .info .wifi span {
+            position: absolute;
+            top: -5px;
+            left: -20px;
+            font-size: 10px;
+            user-select: none;
+            z-index: 99999;
+        }
+
+        .info .wifi i {
+            position: absolute;
+            top: 2px;
+            width: 18px;
+            height: 15px;
+            display: inline-block;
+            background: url(./images/ios15-wifi-icon.png) no-repeat;
+            background-size: cover;
+            filter: grayscale();
+        }
+
+        /* 电量 */
+        .info .power {
+            position: absolute;
+            right: 10px;
+            width: 20px;
+            height: 10px;
+            border-radius: 5px;
+            border: 1px solid rgb(175, 176, 175);
+            cursor: pointer;
+        }
+
+        .info .power .con {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 闪电图标 */
+        .info .power .con>img {
+            width: 5px;
+            height: 8px;
+            z-index: 9999;
+            transform: rotate(25deg);
+            opacity: 0;
+        }
+
+        /* 电量进度条 */
+        .info .power .con>span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-color: rgb(21, 255, 111);
+            width: 50%;
+            height: 8px;
+            z-index: 9998;
+        }
+
+        /* 显示电量 */
+        .info .power>span {
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            padding: 2px 10px;
+            z-index: 9999;
+            color: white;
+            background-color: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(30px);
+            text-align: center;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .info .power:hover span {
+            display: block;
+        }
+
+        /* 头部刘海 */
+        .title {
+            width: 140px;
+            height: 28px;
+            position: absolute;
+            background-color: black;
+            border-bottom-left-radius: 22px;
+            border-bottom-right-radius: 22px;
+            z-index: 999999;
+        }
+
+        .title .line {
+            width: 70px;
+            height: 7px;
+            background-color: rgb(35, 35, 35);
+            position: absolute;
+            top: 7px;
+            left: 25px;
+            border: 1px solid rgb(58, 57, 57);
+            border-radius: 50px;
+        }
+
+        .title .dot {
+            width: 9px;
+            height: 9px;
+            background-color: rgb(23, 22, 22);
+            border: 1px solid rgb(58, 57, 57);
+            position: absolute;
+            top: 6px;
+            right: 24px;
+            border-radius: 50px;
+        }
+
+        /* 电话区域 */
+        .content {
+            position: absolute;
+            z-index: 99995;
+            width: inherit;
+            height: inherit;
+            display: flex;
+            justify-content: center;
+            backdrop-filter: blur(15px);
+            display: none;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            top: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            user-select: none;
+            border: 3px solid #d69a85;
+        }
+
+        .logo>img {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            transition: all .3s linear;
+        }
+
+        .logo>img:hover {
+            transform: scale(1.2);
+        }
+
+        h1 {
+            position: absolute;
+            top: 220px;
+            font-size: 40px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        p {
+            display: block;
+            height: 20px;
+            font-size: 10px;
+            position: absolute;
+            top: 275px;
+            user-select: none;
+        }
+
+        .select {
+            width: 100%;
+            height: 60px;
+            position: absolute;
+            bottom: 100px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .select .yes,
+        .select .no {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            user-select: none;
+            transition: transform .3s ease-in-out;
+            position: relative;
+        }
+
+        img {
+            width: 50px;
+            position: absolute;
+        }
+
+        .select .yes {
+            background-color: rgb(37, 202, 64);
+
+        }
+
+        .select .yes:hover,
+        .select .no:hover {
+            transform: scale(1.1);
+        }
+
+        .select .yes>img {
+            width: 30px;
+            height: 40px;
+            top: 11px;
+            left: 15px;
+        }
+
+        .select .no {
+            background-color: rgb(250, 89, 94);
+        }
+
+        .select .no>img {
+            top: 20px;
+            left: 3px;
+        }
+
+        /* 底部线 */
+        .box>.line {
+            width: 100px;
+            height: 5px;
+            background-color: rgb(253, 251, 251);
+            position: absolute;
+            bottom: 5px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all .1s linear;
+            z-index: 99999;
+            display: none;
+        }
+
+        .box>.line:hover {
+            transform: translateY(-10px);
+        }
+
+        .controller {
+            position: absolute;
+            left: 0px;
+            top: 200px;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(34, 41, 56, 0);
+            border-radius: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 99999;
+        }
+
+        .controller::before {
+            content: "";
+            width: 51px;
+            height: 51px;
+            position: absolute;
+            background-color: rgb(75, 83, 90);
+            border-radius: 50%;
+        }
+
+        .controller::after {
+            content: "";
+            width: 36px;
+            height: 36px;
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            border: 4px solid rgb(141, 144, 145);
+
+        }
+
+        /* 控制器弹出层 */
+        .popup {
+            position: absolute;
+            top: 20%;
+            width: 240px;
+            height: 240px;
+            background-color: rgba(0, 0, 0, .6);
+            border-radius: 40px;
+            backdrop-filter: blur(30px);
+            transition: all .2s linear;
+            z-index: 99999;
+            display: none;
+        }
+
+        .popup .item {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            border: 1px solid rgb(239, 233, 154);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        .popup .item:nth-of-type(1) {
+            left: calc(50% - 30px);
+            top: 15px;
+        }
+
+        .popup .item:nth-of-type(2) {
+            left: 20px;
+            top: 55px;
+        }
+
+        .popup .item:nth-of-type(3) {
+            left: 20px;
+            bottom: 55px;
+        }
+
+        .popup .item:nth-of-type(4) {
+            left: calc(50% - 30px);
+            bottom: 18px;
+        }
+
+        .popup .item:nth-of-type(4)>.controller {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .popup .item:nth-of-type(5) {
+            right: 20px;
+            bottom: 55px;
+        }
+
+        .popup .item:nth-of-type(6) {
+            right: 20px;
+            top: 55px;
+        }
+
+
+        /* 图库区域 */
+        .box .albumArea {
+            position: absolute;
+            width: 300px;
+            height: 100%;
+            display: none;
+            z-index: 99995;
+            backdrop-filter: blur(15px);
+        }
+
+        .box .albumArea .pics {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 97%;
+            border: 1px solid white;
+            overflow: overlay;
+        }
+
+        /* 设置滚动条样式 */
+        /* 滚动条整体样式 */
+        .box .albumArea .pics::-webkit-scrollbar {
+            width: 14px;
+            height: 10px;
+        }
+
+        /* 滚动条滑块样式 */
+        .box .albumArea .pics::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0px 0px 10px rgba(104, 103, 103, 0.963);
+        }
+
+        /* 轨道样式 */
+        .box .albumArea .pics::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 20px 0px 10px rgba(0, 0, 0, .4);
+            border-radius: 10px;
+        }
+
+        .box .albumArea .pics>ul {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            padding-top: 28px;
+            list-style: none;
+            overflow: hidden;
+        }
+
+        .box .albumArea .pics>ul li {
+            position: relative;
+            width: 120px;
+            height: 200px;
+            border: 3px solid #d9fffe;
+            border-radius: 20px;
+            margin: 4px 0;
+            overflow: hidden;
+            box-shadow: 0 0 5px white;
+        }
+
+        .box .albumArea .pics>ul li>img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            transition: all .4s linear;
+            cursor: pointer;
+        }
+
+        .box .albumArea .pics>ul li>img:hover {
+            transform: scale(1.3);
+        }
+
+        /* 音乐模块 */
+        .box .musicArea {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            background-color: rgba(255, 255, 255, .8);
+            backdrop-filter: blur(30px);
+            z-index: 99995;
+            overflow: auto;
+            display: none;
+        }
+
+        .box .musicArea .musicList {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 18px 0;
+
+        }
+
+        .box .musicArea .musicList audio {
+            width: 250px;
+            height: 50px;
+            margin: 10px;
+        }
+
+        /* 底部导航栏 */
+        .nav {
+            position: absolute;
+            bottom: 10px;
+            width: 270px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, .4);
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            /* display: none; */
+        }
+
+        .nav .item {
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgb(216, 151, 151);
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .nav .item.tel {
+            background: url("./images/tel.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.album {
+            background: url("./images/album.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.music {
+            background: url("./images/qq_music.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+        .nav .item.we_chat {
+            background: url("./images/we_chat.jpg") no-repeat;
+            background-size: cover;
+            filter: grayscale(.3);
+        }
+
+
+        /* 桌面滑动区域 */
+        .Desktop_slide_area {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            width: 100%;
+            height: 435px;
+            border-radius: 20px;
+            /* border: 3px dashed rgb(54, 234, 81); */
+        }
+
+        .Desktop_slide_area>ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: 410px;
+            border-radius: inherit;
+            list-style: none;
+        }
+
+        .Desktop_slide_area ul li {
+            position: absolute;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            border-radius: inherit;
+            padding: 10px;
+            /* background-color: rgba(255,255,255,.5);     */
+            transform: translate(calc(var(--i) * 280px));
+        }
+
+        /* 行  */
+        .Desktop_slide_area ul li .line {
+            width: 100%;
+            height: 50px;
+            margin: 10px 0;
+            /* display: flex;
+            justify-content: space-between; */
+            /* border: 1px solid #4ae193; */
+        }
+
+        /* 列 */
+        .Desktop_slide_area ul li .line .item {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px 2px white;
+            float: left;
+            margin: 0 8px;
+            transition: all .2s linear;
+        }
+
+        .Desktop_slide_area ul li .line .item:hover {
+            transform: scale(1.1);
+        }
+
+        /* 相机 */
+        .Desktop_slide_area ul li .line_1 .item_camera {
+            background: url('./images/camera.png') no-repeat 0;
+            background-size: cover;
+        }
+
+        .box .cameraArea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            backdrop-filter: blur(20px);
+            z-index: 9995;
+            display: none;
+        }
+
+        .box .cameraArea #video {
+            width: 284px;
+            height: 290px;
+            object-fit: fill;
+            margin-top: 30px;
+            border: 3px solid #75db8f;
+            border-radius: 20px;
+            margin: 40% 0;
+        }
+
+        /* 计算器 */
+        .Desktop_slide_area ul li .line_1 .item_calculator {
+            background: url('./images/calculator.png') no-repeat 0;
+            background-size: cover;
+        }
+
+        /* 计算器 */
+        .calculator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(34, 36, 51);
+            z-index: 99995;
+            display: none;
+        }
+
+        .calculator .calc {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            width: 100%;
+            height: 505px;
+            /* border: 3px dashed rgb(59, 224, 59); */
+            border-radius: 14px;
+        }
+
+        /* 主题切换 */
+        .calculator .calc .themeToggle {
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 43px);
+            width: 86px;
+            height: 35px;
+            background-color: rgb(41, 43, 55);
+            border-radius: 10px;
+            z-index: 99999;
+        }
+
+        .calculator .calc .themeToggle img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            top: 3px;
+        }
+
+        .calculator .calc .themeToggle img:nth-of-type(1) {
+            left: 8px;
+        }
+
+        .calculator .calc .themeToggle img:nth-of-type(2) {
+            right: 8px;
+        }
+
+        .calculator .calc .panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+
+        }
+
+        .calculator .calc .panel .num_line {
+            position: absolute;
+            top: 50px;
+            width: 100%;
+            height: 150px;
+            /* border: 2px solid rgb(59, 223, 59); */
+            /* overflow: hidden; */
+
+        }
+
+        .calculator .calc .panel .num_line .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            transition: all .3s linear;
+        }
+
+        .calculator .calc .panel .num_line p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0 10px;
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            line-height: 50px;
+            color: white;
+            font-size: 20px;
+            /* box-shadow: inset 0 0 8px 1px white; */
+        }
+
+        .calculator .calc .panel .num_line p:nth-of-type(1) {
+            top: 0;
+        }
+
+        .calculator .calc .panel .num_line p:nth-of-type(2) {
+            top: 50px;
+        }
+
+        .calculator .calc .digitalArea {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            background-color: rgb(41, 43, 55);
+        }
+
+        .calculator .calc .digitalArea table {
+            position: absolute;
+            width: inherit;
+            height: 305px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+
+        }
+
+        .digitalArea table tr td {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 25px;
+            border-radius: 10px;
+            transition: all .2s linear;
+            border: 1px solid transparent;
+        }
+
+        .digitalArea table tr td:hover {
+            box-shadow: inset 0 0 10px 2px white;
+
+        }
+
+        .digitalArea table tr {
+            width: 100%;
+            height: 50px;
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="box">
+        <div class="selectSetup">
+
+        </div>
+
+        <div class="container"></div>
+        <div class="info">
+            <div class="time"></div>
+            <div class="wifi">
+                <i></i>
+                <span>5G</span>
+            </div> <!-- wifi -->
+            <div class="power">
+                <span>50%</span>
+                <div class="con">
+                    <img src="./images/pow.png" alt="">
+                    <span></span>
+                </div>
+
+            </div>
+        </div>
+        <div class="title">
+            <div class="line"></div>
+            <div class="dot"></div>
+        </div>
+
+        <!-- 电话区域 -->
+        <div class="content">
+            <div class="logo">
+                <img src="./images/pichead.jpg" alt="">
+            </div>
+            <h1>He</h1>
+            <p>邀请你您视频通话..</p>
+            <div class="select">
+                <div class="no">
+                    <img src="./images/gua.jpg" alt="">
+                </div>
+                <div class="yes">
+                    <img src="./images/jie.jpg" alt="">
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部线 -->
+        <div class="line"></div>
+        <!-- 背景 -->
+        <div class="controller"></div>
+        <div class="popup">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+
+        <!-- 图库区域 -->
+        <div class="albumArea">
+            <div class="pics">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- 音乐区域 -->
+        <div class="musicArea">
+            <div class="musicList">
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+                <audio src="./music/钱润玉 - 归期_hires.flac" controls></audio>
+            </div>
+        </div>
+
+        <!-- 相机 -->
+        <div class="cameraArea">
+            <video src="" autoplay id="video"></video>
+        </div>
+
+        <!-- 计算器 -->
+        <div class="calculator">
+            <div class="calc">
+                <div class="themeToggle">
+                    <img src="./images/white.png" alt="">
+                    <img src="./images/black.png" alt="">
+                </div>
+                <div class="panel">
+                    <div class="num_line">
+                        <div class="slide">
+                            <p></p>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="digitalArea">
+                    <table>
+                        <tr>
+                            <td style="border-top-left-radius: 30px;">C</td>
+                            <td class="except">÷</td>
+                            <td class="square">×<sup>2</sup></td>
+                            <td class="back_space" style="border-top-right-radius: 30px;">←</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td class="ride">×</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td class="minus">-</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td class="plus">+</td>
+                        </tr>
+                        <tr>
+                            <td class="draw_surplus">%</td>
+                            <td>0</td>
+                            <td class="dot">.</td>
+                            <td>=</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 桌面滑动区域 -->
+        <div class="Desktop_slide_area">
+            <ul>
+                <li style="--i:0">
+                    <!-- 行 -->
+                    <div class="line line_1">
+                        <!-- 列 -->
+                        <div class="item item_camera" title="相机"></div> <!-- 相机 -->
+                        <div class="item item_calculator" title="计算器"></div> <!-- 计算器 -->
+                        <!-- <div class="item"></div>
+                        <div class="item"></div> -->
+                    </div>
+
+                    <!-- <div class="line line_2">
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                    </div>
+                    <div class="line line_3">
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                    </div> -->
+                </li>
+                <li style="--i:1">
+                    <div class="line line_4">
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                        <div class="item"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+        <!-- 主页底部导航栏区域 -->
+        <div class="nav">
+            <div class="item tel" title="电话"> </div>
+            <div class="item album" title="相册"></div>
+            <div class="item music" title="音乐"></div>
+            <div class="item we_chat" title="微信"></div>
+        </div>
+
+    </div>
+    <script>
+
+        function main() {
+            let yes = document.querySelector(".yes");
+            let no = document.querySelector(".no");
+            let controller = document.querySelector(".controller"); // 控制器
+            let box = document.querySelector(".box");
+            let container = document.querySelector(".container");
+            let popup = document.querySelector(".popup"); // 弹出层
+            let items = document.querySelectorAll(".popup .item");
+            let content = document.querySelector(".content");
+            let nav = document.querySelector(".nav");
+            let albumArea = document.querySelector(".albumArea");
+            // let ul = document.querySelector(".albumArea .pics>ul");
+            let line = document.querySelector(".box>.line "); // 主屏底部线
+            let time = document.querySelector(".time");
+            let info = document.querySelector(".info");
+            let selectSetup = document.querySelector(".selectSetup"); // 下拉菜单
+            let musicArea = document.querySelector(".musicArea");   // 音乐区域
+            let cameraArea = document.querySelector(".cameraArea"); // 获取相机页dom
+            let desktop = document.querySelector(".Desktop_slide_area");
+            // 计算器
+            let calculator = document.querySelector(".calculator");
+            let item_calculator = document.querySelector(".item_calculator");
+
+            let slideP = document.querySelectorAll(".panel .num_line .slide>p");
+            let slide = document.querySelector(".panel .num_line .slide");
+            let td = document.querySelectorAll(".digitalArea table tr td");
+
+            let picNum = 32;  // 图库图片数量
+            // 取消浏览器默认的点击事件
+            document.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+            }, false);
+
+            function moveObj() {  // 控制器移动函数 
+                let f = false;
+                let RBoundary = container.offsetWidth - controller.offsetWidth;
+                let BBoundary = container.offsetHeight - controller.offsetHeight;
+
+                controller.addEventListener("mousedown", function (e) {
+                    controller.style.transition = "";
+                    controller.style.backgroundColor = "rgba(34, 41, 56,.9)";
+                    f = true;
+                    let x = e.offsetX;
+                    let y = e.offsetY;
+                    document.addEventListener("mousemove", function (e) {
+                        let mX = e.clientX - box.offsetLeft - controller.offsetWidth / 2;
+                        let mY = e.clientY - box.offsetTop - controller.offsetHeight / 2;
+                        if (f) {
+                            controller.style.left = mX + "px";
+                            controller.style.top = mY + "px"
+                            if (controller.style.left < 0 + "px") {
+                                controller.style.left = 0 + "px";
+                            } else if (controller.offsetLeft + controller.offsetWidth > container.offsetWidth) {
+                                controller.style.left = RBoundary + "px";
+                            }
+
+                            if (controller.style.top < 0 + "px") {
+                                controller.style.top = 0 + "px";
+                            } else if (controller.offsetTop + controller.offsetHeight > container.offsetHeight) {
+                                controller.style.top = BBoundary + "px";
+                            }
+                        }
+                    })
+                })
+                // 节流   
+                // 改变控制器的背景色
+                let flag = false;
+                function change() {
+                    if (flag) {
+                        return;
+                    }
+                    flag = true;
+                    let timer = setTimeout(() => {
+                        flag = false;
+                        controller.style.backgroundColor = "rgba(34, 41, 56, 0)";
+                    }, 1000);
+                }
+
+                controller.addEventListener("mouseup", () => {
+                    f = false;
+                    change();
+                    let mid = container.offsetWidth / 2;
+                    let cMid = controller.offsetWidth / 2;
+                    let cLeft = controller.offsetLeft;
+                    // console.log(oLeft);
+                    controller.style.left = cLeft + cMid < mid ? 0 + "px" : RBoundary + "px";
+                    controller.style.transition = "left .3s ease-in-out";
+                    // if (oLeft + cMid < mid) {
+                    //     controller.style.left = 0 + "px"
+                    // } else {
+                    //     controller.style.left = container.offsetWidth - controller.offsetWidth + "px";
+                    // }
+                })
+            }
+            moveObj();
+            controller.addEventListener("dblclick", function () {
+                popup.style.display = "block";  // 点击控制器显示弹出层
+                items[3].innerHTML = "<div class='controller'></div>";
+                this.style.visibility = "hidden";
+            })
+            // 控制控制器显示遮罩层隐藏
+            function showCP() {
+                popup.style.display = "none";
+                controller.style.visibility = "visible";
+            }
+            container.addEventListener("click", function () {
+                showCP()
+            })
+            content.addEventListener("click", function () {
+                showCP()
+            })
+            albumArea.addEventListener("click", function () {
+                showCP()
+            })
+
+            // 充电模块  充电检测
+            navigator.getBattery().then(function (battery) {
+                // 剩余电量
+                // 检测是否在充电
+                let powers = battery.level * 100 + "%";
+                // battery.addEventListener("levelchange", function () {
+                //     console.log("Battery level: " + battery.level * 100 + "%");
+                // });
+                let powerSpan = document.querySelectorAll(".power span");
+                // console.log(powerSpan);
+                let img = document.querySelector(".info .power .con>img");
+                powerSpan[0].innerHTML = powers;
+                powerSpan[1].style.width = powers
+                // 是否正在充电，yes-充电
+                // let k = battery.charging ? "yes" : "no";
+                img.style.opacity = battery.charging ? "1" : "0";
+
+            });
+
+            // 头部功能模块
+            function headFun() {
+                setInterval(() => {
+                    let date = new Date();
+                    let h = date.getHours();
+                    let m = date.getMinutes();
+                    h = h < 10 ? "0" + h : h;
+                    m = m < 10 ? "0" + m : m;
+                    let T = h + ":" + m;
+                    time.innerHTML = T;
+                }, 300);
+
+
+                // 下拉菜单栏
+                let flag = false;
+                info.addEventListener("mousedown", (e) => {
+                    flag = true;
+                    selectSetup.style.transition = "";
+                    box.addEventListener("mousemove", (e) => {
+
+                        let mY = e.clientY - box.offsetTop - selectSetup.offsetHeight;
+                        if (flag) {
+                            selectSetup.style.top = mY + "px";
+                        }
+                    })
+                })
+                selectSetup.addEventListener("mouseup", () => {
+                    flag = false;
+                    if (selectSetup.offsetTop + selectSetup.offsetHeight > box.offsetHeight / 3) {
+                        selectSetup.style.top = 0 + "%";
+                        selectSetup.style.transition = "all .3s ease-in-out";
+                        line.style.display = "block";
+                    } else {
+                        selectSetup.style.top = -100 + "%";
+                        selectSetup.style.transition = "all .3s ease-in-out";
+                    }
+                })
+
+            }
+            headFun();
+
+            // 返回主屏幕函数
+            function returnMain() {
+                popup.style.display = "none";
+                content.style.display = "none";
+                content.className = "content";
+                albumArea.style.display = "none";
+                controller.style.visibility = "visible";
+                selectSetup.style.top = "-100%";
+                musicArea.style.display = "none";
+                items[3].innerHTML = "";
+                nav.style.display = "";
+                cameraArea.style.display = "none";
+                calculator.style.display = "none";
+            }
+
+
+            // 弹出层快捷功能
+            function maskFun() {
+                items[3].addEventListener("click", function () {
+                    returnMain();
+                    line.style.display = "none";  // 底部线
+
+
+                })
+                // 移入屏幕底部横线返回主屏
+                line.addEventListener("mousemove", () => {
+                    returnMain();
+                    setTimeout(() => {
+                        line.style.display = "none"
+                    }, 200);
+                })
+            }
+            maskFun();
+
+
+            // 桌面滑动区域app函数
+            function deskTopFun() {
+                // 摄像头
+                cameraFun()
+                function cameraFun() {
+                    let item_camera = document.querySelector(".item_camera");
+                    item_camera.addEventListener("click", () => {
+                        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                            document.querySelector("#video").srcObject = stream;
+                        })
+
+                        cameraArea.style.display = "block";
+                        line.style.display = "block";
+
+                    })
+                }
+
+                // 计算器
+                function calculatorFun() {
+                    let plus = document.querySelector(".plus");     // 加
+                    let minus = document.querySelector(".minus");   // 减
+                    let ride = document.querySelector(".ride");     // 乘
+                    let except = document.querySelector(".except")  // 除
+                    let square = document.querySelector(".square"); // 平方
+                    let dot = document.querySelector(".dot");
+                    let draw_surplus = document.querySelector(".draw_surplus") // 取余
+                    let back_space = document.querySelector(".back_space");  // 退格
+                    // C 清空
+                    function clearData() {
+                        slideP[0].innerHTML = ""
+                        slideP[1].innerHTML = ""
+                    }
+                    let s = true;
+                    // ← 退格
+                    function backSpace() {
+                        // console.log(slideP[0].innerHTML.length);
+                        let len1 = slideP[0].innerHTML.length;
+                        let len2 = slideP[1].innerHTML.length;
+                        if (slideP[1].innerHTML == "") {
+                            s = true;
+                        }
+                        if (s == false) {
+                            slideP[1].innerHTML = slideP[1].innerHTML.substr(0, len2 - 1);
+                            len2 -= 1;
+                            if (len2 == 0) {
+                                slide.style.top = slide.offsetTop + 50 + "px";
+                                pointerEv(back_space, true);
+                            }
+                        } else {
+                            slideP[0].innerHTML = slideP[0].innerHTML.substr(0, len1 - 1);
+                            len1 -= 1;
+                        }
+
+                    }
+
+                    // 启动计算器软件
+                    item_calculator.addEventListener("click", function () {
+                        calculator.style.display = 'block';
+                        line.style.display = "block";
+                    })
+                    let res = "";
+
+                    function pointerEv(obj, sw) {
+                        obj.style.pointerEvents = sw ? "none" : "";  // 防止多次点击运算符
+                    }
+
+                    // addSum.style.pointerEvents = k ? "none" : "";
+
+                    for (let i = 0; i < td.length; i++) {
+                        td[i].addEventListener("click", function () {
+                            let flag = false;
+                            if (!isNaN(td[i].innerHTML)) {
+                                pointerEv(plus, false);
+                                pointerEv(minus, false);
+                                pointerEv(ride, false);
+                                pointerEv(except, false);
+                                pointerEv(back_space, false);
+                                pointerEv(draw_surplus, false);
+                                pointerEv(dot, false);
+
+                                slideP[0].innerHTML += td[i].innerHTML;
+                                if (slideP[1].innerHTML != "") {
+                                    flag = true;
+                                }
+                            }
+                            if (flag) {
+                                clearData()
+                                slideP[0].innerHTML += td[i].innerHTML;
+                                slide.style.top = slide.offsetTop + 50 + "px";
+                            }
+                            let symbols = td[i].innerHTML;
+
+                            switch (symbols) {
+                                case "C":
+                                    if (slideP[1].innerHTML != "") {
+                                        clearData()
+                                        slide.style.top = slide.offsetTop + 50 + "px";
+                                    } else {
+                                        slideP[0].innerHTML = ""
+                                    }
+                                    break;
+                                case "←":
+                                    backSpace()
+                                    break;
+                                case "+":
+                                    if (slideP[0].innerHTML != "") {
+                                        slideP[0].innerHTML += "+";
+                                        pointerEv(plus, true);
+                                    }
+                                    break;
+                                case "-":
+                                    if (slideP[0].innerHTML != "") {
+                                        slideP[0].innerHTML += "-";
+                                        pointerEv(minus, true);
+                                    }
+                                    break;
+                                case "×":
+                                    if (slideP[0].innerHTML != "") {
+                                        slideP[0].innerHTML += "×";
+                                        pointerEv(ride, true);
+                                    }
+                                    break;
+                                case "÷":
+                                    if (slideP[0].innerHTML != "") {
+                                        slideP[0].innerHTML += "÷";
+                                        pointerEv(except, true);
+                                    }
+                                    break;
+                                case "×<sup>2</sup>":
+                                    if (slideP[0].innerHTML != "") {
+                                        squareFun(res);
+                                    }
+                                    break;
+                                case "%":
+                                    if (slideP[0].innerHTML != "") {
+                                        // slideP[0].innerHTML += "%";
+                                        // pointerEv(draw_surplus, true);
+                                        percentage(res)
+                                    }
+                                    break;
+                                case ".":
+                                    if (slideP[0].innerHTML != "") {
+                                        slideP[0].innerHTML += ".";
+                                        pointerEv(dot, true);
+                                    }
+                                    break;
+                                case "=":
+                                    res = slideP[0].innerHTML;
+                                    s = false;
+                                    // 如果没有输入则不执行 sum 函数
+                                    if (slideP[0].innerHTML != "") {
+                                        addition(res);          // 加
+                                        subtraction(res);       // 减
+                                        multiplication(res);    // 乘
+                                        division(res);          // 除
+                                        // drawSurplus(res);
+                                        // backSpace();
+                                        slideP[0].innerHTML = "";
+                                        slideP[1].style.fontSize = 40 + "px";
+                                        slide.style.top = slide.offsetTop - 50 + "px";
+                                    }
+                            }
+                        })
+
+                        // 加法函数
+                        function addition(res) {
+                            if (res.indexOf("-") == -1 && res.indexOf("×") == -1 && res.indexOf("÷") == -1) {
+                                // console.log("加法");
+                                // 如果最后一个字符是运算符则舍去
+                                let theSum = 0; // 总和
+                                res = res[res.length - 1] == "+" ? res.substr(0, res.length - 1) : res;
+                                let arrNum = res.split("+");
+                                // console.log("arrNum: " + arrNum);
+                                // console.log("res: "+ res);
+                                for (let i = 0; i < arrNum.length; i++) {
+                                    // + 将字符串转换为数值
+                                    let num = parseFloat(arrNum[i]);
+                                    // console.log(num);
+                                     // theSum += (num * 10) / 10;
+                                    theSum += num;
+                                   
+                                }
+                                // console.log(theSum);
+                                slideP[1].innerHTML = theSum;
+                            }
+                        }
+
+                        // 减法函数
+                        function subtraction(res) {
+                            if (res.indexOf("+") == -1 && res.indexOf("×") == -1 && res.indexOf("÷") == -1) {
+                                // console.log("减法");
+                                res = res[res.length - 1] == "-" ? res.substr(0, res.length - 1) : res;
+                                // console.log(res);
+                                let arrNum = res.split("-");
+                                let theSum = parseFloat(arrNum[0]);
+                                // console.log(arrNum);
+                                for (let i = 1; i < arrNum.length; i++) {
+                                    let num = parseFloat(arrNum[i]);
+                                    theSum -= num;
+                                }
+                                slideP[1].innerHTML = theSum;
+                            }
+
+                        }
+
+                        // 乘法函数
+                        function multiplication(res) {
+                            if (res.indexOf("+") == -1 && res.indexOf("-") == -1 && res.indexOf("÷") == -1) {
+                                // console.log("乘法");
+                                res = res[res.length - 1] == "×" ? res.substr(0, res.length - 1) : res;
+                                // console.log(res);
+                                let arrNum = res.split("×");
+                                let theSum = 1;
+                                // console.log(arrNum);
+                                for (let i = 0; i < arrNum.length; i++) {
+                                    let num = parseFloat(arrNum[i]);
+                                    theSum *= num;
+                                }
+                                slideP[1].innerHTML = theSum;
+                            }
+                        }
+
+                        // 除法函数
+                        function division(res) {
+                            if (res.indexOf("+") == -1 && res.indexOf("-") == -1 && res.indexOf("×") == -1) {
+                                // console.log("除法");
+                                res = res[res.length - 1] == "÷" ? res.substr(0, res.length - 1) : res;
+                                // console.log(res);
+                                let arrNum = res.split("÷");
+                                let theSum = parseFloat(arrNum[0]);
+                                // console.log(arrNum);
+                                for (let i = 1; i < arrNum.length; i++) {
+                                    let num = parseFloat(arrNum[i]);
+                                    console.log(num);
+                                    theSum /= num;
+                                }
+                                // toFixed() 将数字转换为字符串，并指定小数点后保留几位，不足用0补齐
+                                // console.log(parseFloat(theSum.toFixed(2)));
+                                slideP[1].innerHTML = parseFloat(theSum.toFixed(2));
+                            }
+                        }
+
+                        function percentage(res) {
+                            slideP[0].innerHTML = parseFloat(slideP[0].innerHTML) / 100;
+                        }
+
+                        // 平方
+                        function squareFun(res) {
+                            slideP[0].innerHTML = Math.pow(parseFloat(slideP[0].innerHTML), 2);
+                        }
+                    }
+                }
+                calculatorFun();
+            }
+            deskTopFun();
+
+            // 导航栏模块函数
+            function navFun() {
+                // line.style.display = "block"; 非主屏显示，否则不显示
+                // 电话
+                nav.children[0].addEventListener("click", () => {
+                    nav.style.display = "none";
+                    content.style.display = "flex"
+                    line.style.display = "block";
+                })
+
+                // 图库
+                picFun();
+                function picFun() {
+                    nav.children[1].addEventListener("click", () => {
+                        // ul.innerHTML = "";
+                        albumArea.children[0].children[0].innerHTML = ""; // 在下次点击时清空ul列表，重新渲染
+                        nav.style.display = "none";
+                        albumArea.style.display = "flex";
+
+                        line.style.display = "block";
+                        for (let i = 0; i < picNum; i++) {
+                            let li = document.createElement("li");
+                            albumArea.children[0].children[0].appendChild(li);
+
+                            let lis = document.querySelectorAll("li"); // 获取创建所有的 li
+                            let img = document.createElement("img");
+                            lis[i].appendChild(img);
+                        }
+                        // let lis = document.querySelectorAll("li");
+                        // for (let i = 0; i < lis.length; i++) {
+                        //     let img = document.createElement("img");
+                        //     lis[i].appendChild(img);
+                        // }
+                        let imgs = document.querySelectorAll("ul img");
+                        for (let i = 0; i < imgs.length; i++) {
+                            imgs[i].src = "./tuku/" + i + ".jpg";
+                            imgs[i].addEventListener("click", () => {
+                                container.style.background = "url(" + imgs[i].src + ")";
+                                container.style.backgroundSize = "cover";
+                                container.style.noRepeat = "no-repeat";
+                                albumArea.style.display = "none";
+                                nav.style.display = "";
+                            })
+                        }
+                    })
+                }
+
+                // 音乐
+                nav.children[2].addEventListener("click", function () {
+                    musicArea.style.display = "block";
+                    line.style.display = "block";
+                })
+            }
+            navFun();
+
+            yes.addEventListener("click", function () {
+                alert("此功能为开发！");
+            })
+            no.addEventListener("click", function () {
+                alert("此功能为开发！");
+            })
+
+        }
+        main();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 300px;
+            height: 400px;
+        }
+
+        .container div {
+            display: flex;
+        }
+
+        .input {
+            width: 100%;
+        }
+
+        .input>input {
+            width: 99%;
+            margin: 0.1%;
+            height: 50px;
+        }
+
+        button {
+            height: 60px;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="input"><input type="text"></div>
+        <div>
+            <button>del</button><button>C</button>
+        </div>
+        <div>
+            <button>7</button><button>8</button>
+            <button>9</button><button>+</button>
+        </div>
+        <div>
+            <button>4</button><button>5</button>
+            <button>6</button><button>-</button>
+        </div>
+        <div>
+            <button>1</button><button>2</button>
+            <button>3</button><button>*</button>
+        </div>
+        <div>
+            <button>0</button><button>.</button>
+            <button>=</button><button>/</button>
+        </div>
+    </div>
+
+    <script>
+        let btns = document.getElementsByTagName('button');
+        let input = document.querySelector("input");
+        let len = btns.length;
+        let a, b, result, type;
+        for (let i = 0; i < len; i++) {
+            btns[i].addEventListener('click', () => {
+                let val = btns[i].innerHTML;
+                let value = input.value;
+                if (val >= 0 && val <= 9 || val === "."
+                    && value.indexOf(".") === -1) {
+                    input.value += val;
+                }
+                if (value === "" && val === ".") {
+                    input.value = "";
+                }
+                if (value !== "") {
+                    switch (val) {
+                        case "del":
+                            let str = value.substring(0, value.length - 1);
+                            input.value = str;
+                            break;
+                        case "C":
+                            input.value = "";
+                            break;
+                        case "+":
+                            a = value;
+                            input.value = "";
+                            type = "+";
+                            break;
+                        case "-":
+                            a = value;
+                            input.value = "";
+                            type = "-";
+                            break;
+                        case "*":
+                            a = value;
+                            input.value = "";
+                            type = "*";
+                            break;
+                        case "/":
+                            a = value;
+                            input.value = "";
+                            type = "/";
+                            break;
+                        case "=":
+                            if (a !== undefined) {
+                                b = value;
+                                if (type === "+") {
+                                    result = parseFloat(a) + parseFloat(b);
+                                }
+                                if (type === "-") {
+                                    result = parseFloat(a) - parseFloat(b);
+                                }
+                                if (type === "*") {
+                                    result = parseFloat(a) * parseFloat(b);
+                                }
+                                if (type === "/") {
+                                    result = parseFloat(a) / parseFloat(b);
+                                }
+                                let newStr = result + "";
+                                let arr = newStr.split(".");
+                                input.value = arr.length === 2 ?
+                                    result.toFixed(2) : result;
+                            }
+                            break;
+                    }
+                }
+
+            })
+        }
+    </script>
+</body>
+
+</html>
