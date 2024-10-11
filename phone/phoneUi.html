@@ -1675,17 +1675,19 @@
                 // 关闭按钮点击
                 closeBtn.addEventListener("click", function() {
                     returnMain();
-                    box.style.visibility = "hidden";
-                    Desktop_slide_area.style.display = "none";
+                    // box.style.visibility = "hidden";
+                    box.style.opacity = "0";
                     document.body.style.backdropFilter = "blur("+ 0 +"px)";
                     showBtn.style.display = "block";
                 });
 
                 // 显示按钮功能
                 showBtn.addEventListener("click",function() {
-                    Desktop_slide_area.style.display = "block";
-
-                    box.style.visibility = "visible";
+                    returnMain();
+                    line.style.display= "";
+                    // Desktop_slide_area.style.display = "block";
+                    // box.style.visibility = "visible";
+                    box.style.opacity = "1";
                     document.body.style.backdropFilter = "blur("+ 12 +"px)";
                     showBtn.style.display = "none";
                 });
