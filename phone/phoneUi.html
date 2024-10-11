@@ -26,21 +26,20 @@
 
         .box {
             position: relative;
-            width: 300px;
+            width: 300px;   
             min-width: 300px;
             height: 550px;
             display: flex;
             justify-content: center;
             color: white;
-            border: 8px solid black;
+            border: 4px solid black;
             overflow: hidden;
             border-radius: 40px;
             transform-style: preserve-3d;
-            box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.79);
-            perspective: 1000;
-
+            box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.79),
+                        0px 0px 3px 6px rgba(31, 31, 31, 0.87),
+                        0px 0px 3px 9px rgba(43, 43, 43, 0.359);
         }
-
 
         /* 主屏背景 */
         .container {
@@ -49,7 +48,9 @@
             background-size: cover;
             background-position-y: -65px;
             transform-style: preserve-3d;
-            transform: translateZ(-120px) scale(1.3);
+            /* transform: translateZ(-120px) scale(1.3); */
+            box-shadow: inset 0px 0px 21px 1px rgb(0 0 0 / 77%);
+            border-radius: 20px;
         }
 
         .box .selectSetup {
@@ -386,6 +387,7 @@
             transition: all .2s linear;
             z-index: 99999;
             display: none;
+            cursor: pointer;
         }
 
         .popup .item {
@@ -801,6 +803,46 @@
 
         }
 
+        .Desktop_slide_area ul li .line_1 .item_setting {
+            background: url(./images/设置.png) no-repeat center center;
+            background-size: cover;
+            background-color: #ab025a;
+        }
+
+        /* 设置界面 */
+        .settingPanel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* background-color: rgba(255, 255, 255, .2); */
+            backdrop-filter: blur(20px);
+            z-index: 9999 ;
+            display: none;
+        }
+        .settingPanel .closeBtn {
+            position: absolute;
+            top: 40px;
+            left: calc(50% - 100px);
+            width: 200px;
+            height: 40px;
+            border: none;
+            outline: none;
+            size: 25px;
+            font-weight: bold;
+            letter-spacing: 10px;
+            background-color: rgb(93,127,254);
+            color: white;
+            border: 2px solid rgba(67, 242, 255,0);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all .3s linear;
+        }
+
+        .settingPanel .closeBtn:hover {
+            border: 2px solid rgba(67, 242, 2551, 1);
+            background-color:  rgba(93,127,254,.5);
+        }
+
         .digitalArea table tr td {
             width: 50px;
             height: 50px;
@@ -808,7 +850,7 @@
             text-align: center;
             font-size: 25px;
             border-radius: 10px;
-            transition: all .2s linear;
+            transition: all .1s linear;
             border: 1px solid transparent;
         }
 
@@ -822,11 +864,28 @@
             height: 50px;
 
         }
+
+        /* 显示按钮 */
+        .showBtn {
+            position: absolute;
+            top: 10px;
+            right: 10px;    
+            width: 50px;
+            height:50px;
+            background: url(./images/显示.png) no-repeat center center;
+            background-size: cover  ;
+            cursor: pointer;
+            display: none;
+            z-index: 9999;
+        }
     </style>
 
 </head>
 
 <body>
+    <div class="showBtn">
+    </div>
+
     <div class="box">
         <div class="selectSetup">
 
@@ -963,6 +1022,13 @@
             </div>
         </div>
 
+        <!-- 设置 -->
+        <div class="settingPanel">
+            <button class="closeBtn">关闭</button>
+        </div>
+
+
+
         <!-- 桌面滑动区域 -->
         <div class="Desktop_slide_area">
             <ul>
@@ -972,6 +1038,7 @@
                         <!-- 列 -->
                         <div class="item item_camera" title="相机"></div> <!-- 相机 -->
                         <div class="item item_calculator" title="计算器"></div> <!-- 计算器 -->
+                        <div class="item item_setting" title="计算器"></div> <!-- 设置 -->
                         <!-- <div class="item"></div>
                         <div class="item"></div> -->
                     </div>
@@ -1012,7 +1079,7 @@
 
     </div>
     <script>
-        function main() {
+            function main() {
             let yes = document.querySelector(".yes");
             let no = document.querySelector(".no");
             let controller = document.querySelector(".controller"); // 控制器
@@ -1035,19 +1102,25 @@
             let calculator = document.querySelector(".calculator");
             let item_calculator = document.querySelector(".item_calculator");
 
+            // 设置界面 
+            let settingPanel = document.querySelector(".settingPanel");
+
             let slideP = document.querySelectorAll(".panel .num_line .slide>p");
             let slide = document.querySelector(".panel .num_line .slide");
             let td = document.querySelectorAll(".digitalArea table tr td");
 
             let picNum = 32;  // 图库图片数量
-
-            setInterval(() => {
+            // 媒体流
+            let mediaStream = null;
+            // 如果背景图为空刷新界面
+            let timer =  setInterval(() => {
                 if (!localStorage.getItem("index")) {
                     location.reload();
-                    localStorage.setItem("index", 0)
+                    console.log(1111);
+                    
+                    localStorage.setItem("index", 0);
                 }
-                return;
-            }, 2000);
+            }, 200);
 
             // 取消浏览器默认的点击事件
             document.addEventListener("mousedown", (e) => {
@@ -1122,6 +1195,7 @@
             controller.addEventListener("dblclick", function () {
                 popup.style.display = "block";  // 点击控制器显示弹出层
                 items[3].innerHTML = "<div class='controller'></div>";
+                items[1].innerHTML = "<div class='a'>关闭</div>"
                 this.style.visibility = "hidden";
             })
             // 控制控制器显示遮罩层隐藏
@@ -1213,6 +1287,17 @@
                 nav.style.display = "";
                 cameraArea.style.display = "none";
                 calculator.style.display = "none";
+
+                settingPanel.style.display = "none";
+                // 关闭摄像头调用
+                if (mediaStreamTrack != null) {
+                    mediaStreamTrack.getVideoTracks().forEach(track => {
+                        track.stop();
+                        
+                    });
+                    document.querySelector("#video").srcObject = null;
+
+                }
             }
 
 
@@ -1227,6 +1312,7 @@
                 // 移入屏幕底部横线返回主屏
                 line.addEventListener("mousemove", () => {
                     returnMain();
+
                     setTimeout(() => {
                         line.style.display = "none"
                     }, 200);
@@ -1234,7 +1320,7 @@
             }
             maskFun();
 
-
+            let mediaStreamTrack = null;
             // 桌面滑动区域app函数
             function deskTopFun() {
                 // 摄像头
@@ -1243,9 +1329,10 @@
                     let item_camera = document.querySelector(".item_camera");
                     item_camera.addEventListener("click", () => {
                         navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                            mediaStreamTrack = stream;
                             document.querySelector("#video").srcObject = stream;
-                        })
 
+                        })
                         cameraArea.style.display = "block";
                         line.style.display = "block";
 
@@ -1553,8 +1640,9 @@
                 if (i != null) {
                     console.log(i);
                     SetImg(i);
+                    clearInterval("timer");
                 } else {
-                    SetImg(0);
+                    setInterval(timer);
                 }
 
             }
@@ -1570,6 +1658,44 @@
                 document.body.style.noRepeat = "no-repeat";
                 document.body.style.backgroundPosition = "center center";
             }
+
+
+            // 设置功能区
+            function SettingFun() {
+                let showBtn = document.querySelector(".showBtn");
+                let item_setting  = document.querySelector(".item_setting");
+                let closeBtn = document.querySelector(".closeBtn");
+                let box = document.querySelector(".box");
+                let Desktop_slide_area = document.querySelector(".Desktop_slide_area");
+                item_setting.addEventListener("click", function() {
+                    settingPanel.style.display = "block";
+                    line.style.display = "block";
+                });
+
+                // 关闭按钮点击
+                closeBtn.addEventListener("click", function() {
+                    returnMain();
+                    box.style.visibility = "hidden";
+                    Desktop_slide_area.style.display = "none";
+                    document.body.style.backdropFilter = "blur("+ 0 +"px)";
+                    showBtn.style.display = "block";
+                });
+
+                // 显示按钮功能
+                showBtn.addEventListener("click",function() {
+                    Desktop_slide_area.style.display = "block";
+
+                    box.style.visibility = "visible";
+                    document.body.style.backdropFilter = "blur("+ 12 +"px)";
+                    showBtn.style.display = "none";
+                });
+                
+
+            }
+            SettingFun();
+
+
+
 
 
             yes.addEventListener("click", function () {
