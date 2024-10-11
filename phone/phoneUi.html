@@ -21,6 +21,7 @@
             justify-content: center;
             align-items: center;
             perspective: 1000px;
+            backdrop-filter: blur(12px);
         }
 
         .box {
@@ -37,9 +38,9 @@
             transform-style: preserve-3d;
             box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.79);
             perspective: 1000;
-           
+
         }
-      
+
 
         /* 主屏背景 */
         .container {
@@ -57,7 +58,7 @@
             width: 100%;
             height: 100%;
             z-index: 99997;
-            background-color: rgba(255,255,255, .2);
+            background-color: rgba(255, 255, 255, .2);
             backdrop-filter: blur(40px);
         }
 
@@ -1011,7 +1012,6 @@
 
     </div>
     <script>
-
         function main() {
             let yes = document.querySelector(".yes");
             let no = document.querySelector(".no");
@@ -1040,10 +1040,22 @@
             let td = document.querySelectorAll(".digitalArea table tr td");
 
             let picNum = 32;  // 图库图片数量
+
+            setInterval(() => {
+                if (!localStorage.getItem("index")) {
+                    location.reload();
+                    localStorage.setItem("index", 0)
+                }
+                return;
+            }, 2000);
+
             // 取消浏览器默认的点击事件
             document.addEventListener("mousedown", (e) => {
                 e.preventDefault();
             }, false);
+
+            // 设置背景图片
+            SetImage();
 
             function moveObj() {  // 控制器移动函数 
                 let f = false;
@@ -1056,7 +1068,7 @@
                     f = true;
                     let x = e.offsetX;
                     let y = e.offsetY;
-                    document.addEventListener("mousemove", function (e) {
+                    document.body.addEventListener("mousemove", function (e) {
                         let mX = e.clientX - box.offsetLeft - controller.offsetWidth / 2;
                         let mY = e.clientY - box.offsetTop - controller.offsetHeight / 2;
                         if (f) {
@@ -1090,7 +1102,7 @@
                     }, 1000);
                 }
 
-                controller.addEventListener("mouseup", () => {
+                document.body.addEventListener("mouseup", () => {
                     f = false;
                     change();
                     let mid = container.offsetWidth / 2;
@@ -1164,7 +1176,7 @@
                 info.addEventListener("mousedown", (e) => {
                     flag = true;
                     selectSetup.style.transition = "";
-                    box.addEventListener("mousemove", (e) => {
+                    document.body.addEventListener("mousemove", (e) => {
 
                         let mY = e.clientY - box.offsetTop - selectSetup.offsetHeight;
                         if (flag) {
@@ -1172,7 +1184,8 @@
                         }
                     })
                 })
-                selectSetup.addEventListener("mouseup", () => {
+
+                document.body.addEventListener("mouseup", () => {
                     flag = false;
                     if (selectSetup.offsetTop + selectSetup.offsetHeight > box.offsetHeight / 3) {
                         selectSetup.style.top = 0 + "%";
@@ -1400,9 +1413,9 @@
                                     // + 将字符串转换为数值
                                     let num = parseFloat(arrNum[i]);
                                     // console.log(num);
-                                     // theSum += (num * 10) / 10;
+                                    // theSum += (num * 10) / 10;
                                     theSum += num;
-                                   
+
                                 }
                                 // console.log(theSum);
                                 slideP[1].innerHTML = theSum;
@@ -1488,6 +1501,7 @@
                     line.style.display = "block";
                 })
 
+
                 // 图库
                 picFun();
                 function picFun() {
@@ -1515,15 +1529,16 @@
                         for (let i = 0; i < imgs.length; i++) {
                             imgs[i].src = "./tuku/" + i + ".jpg";
                             imgs[i].addEventListener("click", () => {
-                                container.style.background = "url(" + imgs[i].src + ")";
-                                container.style.backgroundSize = "cover";
-                                container.style.noRepeat = "no-repeat";
-                                albumArea.style.display = "none";
+                                localStorage.setItem("index", i);
+                                // container.style.background = "url(" + imgs[localStorage.getItem("index")].src + ")";
+
                                 nav.style.display = "";
+                                SetImage();
                             })
                         }
                     })
                 }
+
 
                 // 音乐
                 nav.children[2].addEventListener("click", function () {
@@ -1532,6 +1547,30 @@
                 })
             }
             navFun();
+            // 设置网页背景图片和小屏一致
+            function SetImage() {
+                let i = localStorage.getItem("index");
+                if (i != null) {
+                    console.log(i);
+                    SetImg(i);
+                } else {
+                    SetImg(0);
+                }
+
+            }
+
+            function SetImg(i) {
+                container.style.background = "url(tuku/" + i + ".jpg)";
+                container.style.backgroundSize = "cover";
+                container.style.noRepeat = "no-repeat";
+                albumArea.style.display = "none";
+
+                document.body.style.backgroundImage = "url(tuku/" + i + ".jpg)";
+                document.body.style.backgroundSize = "cover";
+                document.body.style.noRepeat = "no-repeat";
+                document.body.style.backgroundPosition = "center center";
+            }
+
 
             yes.addEventListener("click", function () {
                 alert("此功能为开发！");
