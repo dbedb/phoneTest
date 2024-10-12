@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Document</title>
     <style>
         * {
@@ -47,7 +48,8 @@
             width: inherit;
             background: url("./images/bgpicture.jpg") no-repeat;
             background-size: cover;
-            background-position-y: -65px;
+            /* background-position-y: -65px; */
+            background-position: center center;
             transform-style: preserve-3d;
             /* transform: translateZ(-120px) scale(1.3); */
             box-shadow: inset 0px 0px 21px 1px rgb(0 0 0 / 77%);
@@ -188,7 +190,8 @@
 
         /* 头部刘海 */
         .title {
-            width: 140px;
+            /* width: 140px; */
+            width: 47%;
             height: 28px;
             position: absolute;
             background-color: black;
@@ -217,6 +220,7 @@
             top: 6px;
             right: 24px;
             border-radius: 50px;
+           transition: all .3s linear;
         }
 
         /* 电话区域 */
@@ -457,31 +461,35 @@
             top: 0;
             width: 100%;
             height: 97%;
-            border: 1px solid white;
+            /* border: 1px solid white; */
             overflow: overlay;
         }
 
         /* 设置滚动条样式 */
         /* 滚动条整体样式 */
-        .box .albumArea .pics::-webkit-scrollbar {
+        .box .albumArea .pics::-webkit-scrollbar,
+        .settingPanel .funBtnlist::-webkit-scrollbar {
             width: 14px;
             height: 10px;
         }
 
         /* 滚动条滑块样式 */
-        .box .albumArea .pics::-webkit-scrollbar-thumb {
+        .box .albumArea .pics::-webkit-scrollbar-thumb,
+        .settingPanel .funBtnlist::-webkit-scrollbar-thumb {
             border-radius: 10px;
             /* -webkit-box-shadow: inset 0px 0px 10px rgba(104, 103, 103, 0.963); */
             -webkit-box-shadow: inset 0px 0px 10px rgba(71, 255, 212, 0.963);
         }
 
         /* 轨道样式 */
-        .box .albumArea .pics::-webkit-scrollbar-track {
+        .box .albumArea .pics::-webkit-scrollbar-track,
+        .settingPanel .funBtnlist::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 20px 0px 10px rgba(0, 0, 0, .4);
             border-radius: 10px;
         }
 
-        .box .albumArea .pics>ul {
+        .box .albumArea .pics>ul,
+        .settingPanel .funBtnlist>ul {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
@@ -806,11 +814,19 @@
             border-top-right-radius: 30px;
 
         }
+        .setting {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width:100%;
+            height: 100%;
+            background: url(./images/设置.png) no-repeat center center;
+            background-size: cover;
+        }
 
         .Desktop_slide_area ul li .line_1 .item_setting {
             background: url(./images/设置.png) no-repeat center center;
             background-size: cover;
-            background-color: #ab025a;
         }
 
         /* 设置界面 */
@@ -820,20 +836,51 @@
             height: 100%;
             /* background-color: rgba(255, 255, 255, .2); */
             backdrop-filter: blur(20px);
+            /* border: 1px solid #ffffff; */
             z-index: 9999 ;
             display: none;
         }
-        .settingPanel .closeBtn {
-            position: absolute;
-            top: 40px;
-            left: calc(50% - 100px);
-            width: 200px;
+        /* 设置界面按钮列表 */
+        .settingPanel .funBtnlist {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 97%;
+            /* border: 1px solid white; */
+            overflow: overlay;
+          
+        }
+        /* .settingPanel .funBtnlist>ul {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            padding-top: 28px;
+            list-style: none;
+            overflow: hidden;
+        } */
+        .settingPanel .funBtnlist>ul li {
+            position: relative;
+            width: 260px;    
             height: 40px;
+            margin: 6px 0;
             border: none;
             outline: none;
-            size: 25px;
+            font-size: 18px;
+            font-family: '楷体';
             font-weight: bold;
             letter-spacing: 10px;
+          
+        }
+        .settingPanel .funBtnlist>ul li>button{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            transition: all .4s linear;
+            cursor: pointer;
             background-color: rgb(93,127,254);
             color: white;
             border: 2px solid rgba(67, 242, 255,0);
@@ -841,8 +888,8 @@
             cursor: pointer;
             transition: all .3s linear;
         }
-
-        .settingPanel .closeBtn:hover {
+      
+        .settingPanel .funBtnlist>ul li>button:hover {
             border: 2px solid rgba(67, 242, 2551, 1);
             background-color:  rgba(93,127,254,.5);
         }
@@ -860,7 +907,6 @@
 
         .digitalArea table tr td:hover {
             box-shadow: inset 0 0 10px 2px white;
-
         }
 
         .digitalArea table tr {
@@ -882,11 +928,45 @@
             display: none;
             z-index: 9999;
         }
+
+        /* 桌面时间 */
+        .BGtime {
+            position: absolute;
+            top: 200px;
+            width: 500px;
+            height: 120px;
+            text-align: ceneter;
+            transition: all .4s linear;
+            opacity: 0;
+            /* background-color: red; */
+        }
+        .BGtime>h1 {
+            background-color: rgba(255,255,255,.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px 1px rgba(255, 255, 255,.5),
+                        inset 0 0 10px 1px rgba(175, 175, 175, 0.79),
+                        inset 0 0 20px 2px rgba(220, 220, 220, 0.79);
+            border-radius: 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            line-height: 120px;
+            font-size: 100px;
+            color:#ffffff;
+            font-family: "微软雅黑";
+            text-shadow: 0 0 10px white;
+        }
     </style>
 
 </head>
 
 <body>
+    <div class="BGtime">
+        <h1></h1>
+    </div>
     <div class="showBtn">
     </div>
 
@@ -1028,7 +1108,21 @@
 
         <!-- 设置 -->
         <div class="settingPanel">
-            <button class="closeBtn">关闭</button>
+            <div class="funBtnlist">
+                <ul>
+                    <li>
+                        <button class="closeBtn">关闭</button>
+                    </li>
+                    <li>
+                        <button class="wallpaperLoop">开启壁纸循环</button>
+                    </li>
+
+                    <li>
+                        <button class="openBGtime">开启桌面时间</button>
+                    </li>
+                </ul>
+
+            </div>
         </div>
 
 
@@ -1097,6 +1191,7 @@
             // let ul = document.querySelector(".albumArea .pics>ul");
             let line = document.querySelector(".box>.line "); // 主屏底部线
             let time = document.querySelector(".time");
+            let bgtime = document.querySelector(".BGtime h1");
             let info = document.querySelector(".info");
             let selectSetup = document.querySelector(".selectSetup"); // 下拉菜单
             let musicArea = document.querySelector(".musicArea");   // 音乐区域
@@ -1197,11 +1292,26 @@
                 })
             }
             moveObj();
-            controller.addEventListener("dblclick", function () {
-                popup.style.display = "block";  // 点击控制器显示弹出层
-                items[3].innerHTML = "<div class='controller'></div>";
-                items[1].innerHTML = "<div class='a'>关闭</div>"
-                this.style.visibility = "hidden";
+            let flag = false;
+            let T = null;
+            controller.addEventListener("mousedown",function() {
+                T = setTimeout(() => {
+                    flag = true;
+                    console.log(1);
+                }, 100);
+            });
+            controller.addEventListener("mouseup", function () {
+                if (!flag) {
+                    popup.style.display = "block";  // 点击控制器显示弹出层
+                    items[3].innerHTML = "<div class='controller'></div>";
+                    items[1].innerHTML = "<div class='setting'></div>";
+                    this.style.visibility = "hidden";
+                } else {
+                    flag = false;
+
+                }
+                clearTimeout(T);
+                console.log(flag);
             })
             // 控制控制器显示遮罩层隐藏
             function showCP() {
@@ -1243,10 +1353,13 @@
                     let date = new Date();
                     let h = date.getHours();
                     let m = date.getMinutes();
+                    let s = date.getSeconds();
                     h = h < 10 ? "0" + h : h;
                     m = m < 10 ? "0" + m : m;
+                    s = s < 10 ? "0" + s : s;
                     let T = h + ":" + m;
                     time.innerHTML = T;
+                    bgtime.innerHTML = T + ":" + s;
                 }, 300);
 
 
@@ -1294,15 +1407,7 @@
                 calculator.style.display = "none";
 
                 settingPanel.style.display = "none";
-                // 关闭摄像头调用
-                if (mediaStreamTrack != null) {
-                    mediaStreamTrack.getVideoTracks().forEach(track => {
-                        track.stop();
-                        
-                    });
-                    document.querySelector("#video").srcObject = null;
-
-                }
+                closeCameraFun();
             }
 
 
@@ -1325,6 +1430,19 @@
             }
             maskFun();
 
+            // 关闭摄像头调用方法
+            function closeCameraFun() {
+                if (mediaStreamTrack != null) {
+                    mediaStreamTrack.getVideoTracks().forEach(track => {
+                        track.stop();
+                        
+                    });
+                    document.querySelector("#video").srcObject = null;
+                    document.querySelector(".title .dot").style.background="rgb(23, 22, 22)";
+                }
+            }
+
+
             let mediaStreamTrack = null;
             // 桌面滑动区域app函数
             function deskTopFun() {
@@ -1336,11 +1454,10 @@
                         navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
                             mediaStreamTrack = stream;
                             document.querySelector("#video").srcObject = stream;
-
                         })
                         cameraArea.style.display = "block";
                         line.style.display = "block";
-
+                        document.querySelector(".title .dot").style.background="#c2c2c2";
                     })
                 }
 
@@ -1602,7 +1719,6 @@
                         albumArea.children[0].children[0].innerHTML = ""; // 在下次点击时清空ul列表，重新渲染
                         nav.style.display = "none";
                         albumArea.style.display = "flex";
-
                         line.style.display = "block";
                         for (let i = 0; i < picNum; i++) {
                             let li = document.createElement("li");
@@ -1611,6 +1727,7 @@
                             let lis = document.querySelectorAll("li"); // 获取创建所有的 li
                             let img = document.createElement("img");
                             img.setAttribute("rel","preload");
+                            img.setAttribute("as","image");
                             lis[i].appendChild(img);
                         }
                         // let lis = document.querySelectorAll("li");
@@ -1660,15 +1777,16 @@
 
                 container.style.backgroundSize = "cover";
                 container.style.noRepeat = "no-repeat";
+                container.style.backgroundPosition = "center center";
                 albumArea.style.display = "none";
-
                 // document.body.style.backgroundImage = "url(tuku/" + i + ".jpg)";
+
                 document.body.style.backgroundImage = "url(wallpaper/" + i + ".png)";
                 document.body.style.backgroundSize = "cover";
                 document.body.style.noRepeat = "no-repeat";
                 document.body.style.backgroundPosition = "center center";
+                
             }
-
 
             // 设置功能区
             function SettingFun() {
@@ -1677,19 +1795,39 @@
                 let closeBtn = document.querySelector(".closeBtn");
                 let box = document.querySelector(".box");
                 let Desktop_slide_area = document.querySelector(".Desktop_slide_area");
+                let wallpaperLoop = document.querySelector(".wallpaperLoop");
+                let openBGtime = document.querySelector(".openBGtime");
+                let BGtime = document.querySelector(".BGtime");
+                // 是否开启桌面时间
+                let istimeShow = false;
+
                 item_setting.addEventListener("click", function() {
                     settingPanel.style.display = "block";
                     line.style.display = "block";
-                });
 
+                });
                 // 关闭按钮点击
                 closeBtn.addEventListener("click", function() {
+                    closeFun();
+                    // if (istimeShow) {
+                    //     BGtime.style.opacity = "1";
+                    // } else {
+                    //     BGtime.style.opacity = "0";
+
+                    // }
+                    BGtime.style.opacity = istimeShow ? "1" : "0";
+                    
+                });
+
+                // 关闭方法
+                function closeFun() {
                     returnMain();
                     // box.style.visibility = "hidden";
                     box.style.opacity = "0";
                     document.body.style.backdropFilter = "blur("+ 0 +"px)";
                     showBtn.style.display = "block";
-                });
+                
+                }
 
                 // 显示按钮功能
                 showBtn.addEventListener("click",function() {
@@ -1700,27 +1838,59 @@
                     box.style.opacity = "1";
                     document.body.style.backdropFilter = "blur("+ 12 +"px)";
                     showBtn.style.display = "none";
+
+                    // 关闭桌面时间
+                    BGtime.style.opacity = "0";
+                    
+                });
+
+                let isLoop = false;
+                let loop = null;
+                wallpaperLoop.addEventListener("click",function() {
+                    let i = localStorage.getItem("index");
+                    isLoop = !isLoop;
+                    if (isLoop) {
+                        wallpaperLoop.innerText = "关闭壁纸循环";
+                        loop = setInterval(() => {
+                            i++;
+                            localStorage.setItem("index",i);
+                            if (i >= picNum) i = 0;
+                            SetImg(i)
+                        }, 10000);
+                    } else {
+                        clearInterval(loop);
+                        wallpaperLoop.innerText = "开启壁纸循环";
+                    }
                 });
                 
+                openBGtime.addEventListener("click",function() {
+                    istimeShow = !istimeShow;
+                    if (istimeShow) {
+                        openBGtime.innerText = "关闭桌面时间";
+                        console.log("开启",istimeShow);
+                        
+                    } else {
+                        openBGtime.innerText = "开启桌面时间";
+                        console.log("关闭",istimeShow);
 
+                    }
+                    
+                });
             }
             SettingFun();
 
 
 
-
-
-            yes.addEventListener("click", function () {
-                alert("此功能为开发！");
-            })
-            no.addEventListener("click", function () {
-                alert("此功能为开发！");
-            })
+            // yes.addEventListener("click", function () {
+            //     alert("此功能为开发！");
+            // })
+            // no.addEventListener("click", function () {
+            //     alert("此功能为开发！");
+            // })
 
         }
         main();
 
     </script>
 </body>
-
 </html>
