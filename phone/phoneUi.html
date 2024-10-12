@@ -22,6 +22,7 @@
             align-items: center;
             perspective: 1000px;
             backdrop-filter: blur(12px);
+            transition: all .6s linear;
         }
 
         .box {
@@ -470,7 +471,8 @@
         /* 滚动条滑块样式 */
         .box .albumArea .pics::-webkit-scrollbar-thumb {
             border-radius: 10px;
-            -webkit-box-shadow: inset 0px 0px 10px rgba(104, 103, 103, 0.963);
+            /* -webkit-box-shadow: inset 0px 0px 10px rgba(104, 103, 103, 0.963); */
+            -webkit-box-shadow: inset 0px 0px 10px rgba(71, 255, 212, 0.963);
         }
 
         /* 轨道样式 */
@@ -491,8 +493,10 @@
 
         .box .albumArea .pics>ul li {
             position: relative;
-            width: 120px;
-            height: 200px;
+            /* width: 120px;
+            height: 200px; */
+            width: 260px;
+            height: 150px;  
             border: 3px solid #d9fffe;
             border-radius: 20px;
             margin: 4px 0;
@@ -1109,7 +1113,8 @@
             let slide = document.querySelector(".panel .num_line .slide");
             let td = document.querySelectorAll(".digitalArea table tr td");
 
-            let picNum = 32;  // 图库图片数量
+            // let picNum = 32;  // 图库图片数量
+            let picNum = 12;  // 图库图片数量
             // 媒体流
             let mediaStream = null;
             // 如果背景图为空刷新界面
@@ -1605,6 +1610,7 @@
 
                             let lis = document.querySelectorAll("li"); // 获取创建所有的 li
                             let img = document.createElement("img");
+                            img.setAttribute("rel","preload");
                             lis[i].appendChild(img);
                         }
                         // let lis = document.querySelectorAll("li");
@@ -1614,7 +1620,8 @@
                         // }
                         let imgs = document.querySelectorAll("ul img");
                         for (let i = 0; i < imgs.length; i++) {
-                            imgs[i].src = "./tuku/" + i + ".jpg";
+                            // imgs[i].src = "./tuku/" + i + ".jpg";
+                            imgs[i].src = "./wallpaper/" + i + ".png";
                             imgs[i].addEventListener("click", () => {
                                 localStorage.setItem("index", i);
                                 // container.style.background = "url(" + imgs[localStorage.getItem("index")].src + ")";
@@ -1648,12 +1655,15 @@
             }
 
             function SetImg(i) {
-                container.style.background = "url(tuku/" + i + ".jpg)";
+                // container.style.background = "url(tuku/" + i + ".jpg)";
+                container.style.background = "url(wallpaper/" + i + ".png)";
+
                 container.style.backgroundSize = "cover";
                 container.style.noRepeat = "no-repeat";
                 albumArea.style.display = "none";
 
-                document.body.style.backgroundImage = "url(tuku/" + i + ".jpg)";
+                // document.body.style.backgroundImage = "url(tuku/" + i + ".jpg)";
+                document.body.style.backgroundImage = "url(wallpaper/" + i + ".png)";
                 document.body.style.backgroundSize = "cover";
                 document.body.style.noRepeat = "no-repeat";
                 document.body.style.backgroundPosition = "center center";
