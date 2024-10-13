@@ -28,7 +28,7 @@
 
         .box {
             position: relative;
-            width: 300px;   
+            width: 800px;   
             min-width: 300px;
             height: 550px;
             display: flex;
@@ -71,9 +71,11 @@
             position: absolute;
             width: 100%;
             height: 28px;
-            background-color: rgba(0, 0, 0, .5);
+            /* background-color: rgba(0, 0, 0, .5); */
+            /* background-color: rgba(255, 255, 255, .3); */
+            /* backdrop-filter: blur(10px); */
             z-index: 999999;
-            border-radius: 8px;
+            border-radius: 6px;
             line-height: 28px;
             color: rgb(224, 221, 221);
             cursor: grab;
@@ -90,14 +92,17 @@
 
         .info .time {
             position: absolute;
-            left: 25px;
+            left: 35px;
             user-select: none;
             font-weight: 800;
+            transform-origin: left top;
+            transition: all .2s linear;
+            transform: scale(1);
         }
 
         .info .wifi {
             position: absolute;
-            right: 50px;
+            right: 80px;
             height: 15px;
             font-size: 0;
         }
@@ -126,7 +131,7 @@
         /* 电量 */
         .info .power {
             position: absolute;
-            right: 10px;
+            right: 35px;
             width: 20px;
             height: 10px;
             border-radius: 5px;
@@ -198,6 +203,7 @@
             border-bottom-left-radius: 22px;
             border-bottom-right-radius: 22px;
             z-index: 999999;
+            display: none;
         }
 
         .title .line {
@@ -329,21 +335,20 @@
 
         /* 底部线 */
         .box>.line {
-            width: 100px;
+            /* width: 200px; */
+            width: 30%;
             height: 5px;
             background-color: rgb(253, 251, 251);
             position: absolute;
             bottom: 5px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all .1s linear;
+            transition: all .2s linear;
             z-index: 99999;
             display: none;
         }
 
-        .box>.line:hover {
-            transform: translateY(-10px);
-        }
+      
 
         .controller {
             position: absolute;
@@ -448,7 +453,8 @@
         /* 图库区域 */
         .box .albumArea {
             position: absolute;
-            width: 300px;
+            /* width: 300px; */
+            width: 100%;
             height: 100%;
             display: none;
             z-index: 99995;
@@ -503,8 +509,8 @@
             position: relative;
             /* width: 120px;
             height: 200px; */
-            width: 260px;
-            height: 150px;  
+            width: 335px;
+            height: 200px;  
             border: 3px solid #d9fffe;
             border-radius: 20px;
             margin: 4px 0;
@@ -563,8 +569,11 @@
         .nav {
             position: absolute;
             bottom: 10px;
-            width: 270px;
+            /* width: 270px; */
+            min-width: 270px;
+            width: 45%;
             height: 60px;
+            backdrop-filter: blur(3px);
             background-color: rgba(0, 0, 0, .4);
             border-radius: 15px;
             display: flex;
@@ -630,22 +639,24 @@
         .Desktop_slide_area ul li {
             position: absolute;
             top: 0;
+            left: 0;
             width: inherit;
             height: inherit;
             border-radius: inherit;
-            padding: 10px;
+            padding: 10px 15px;
             /* background-color: rgba(255,255,255,.5);     */
-            transform: translate(calc(var(--i) * 280px));
+            transform: translate(calc(var(--i) * 800px));
+            /* border: 2px solid #18f100; */
         }
 
         /* 行  */
         .Desktop_slide_area ul li .line {
             width: 100%;
             height: 50px;
-            margin: 10px 0;
+            /* margin: 10px 0; */
             /* display: flex;
             justify-content: space-between; */
-            /* border: 1px solid #4ae193; */
+            /*  border: 1px solid #4ae193; */
         }
 
         /* 列 */
@@ -656,12 +667,14 @@
             cursor: pointer;
             box-shadow: inset 0 0 5px 2px white;
             float: left;
-            margin: 0 8px;
+            /* margin: 0 8px; */
             transition: all .2s linear;
+            transform: translate(calc(var(--i) * 22.1px));
+
         }
 
         .Desktop_slide_area ul li .line .item:hover {
-            transform: scale(1.1);
+            transform:  translate(calc(var(--i) * 22.1px)) scale(1.1);
         }
 
         /* 相机 */
@@ -682,13 +695,15 @@
         }
 
         .box .cameraArea #video {
-            width: 284px;
-            height: 290px;
+            width: 300px;
+            height: 300px;
             object-fit: fill;
-            margin-top: 30px;
             border: 3px solid #75db8f;
             border-radius: 20px;
-            margin: 40% 0;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
         }
 
         /* 计算器 */
@@ -844,34 +859,33 @@
         .settingPanel .funBtnlist {
             position: relative;
             left: 0;
+            display: block;
             top: 0;
+            padding: 10px;
             width: 100%;
             height: 97%;
             /* border: 1px solid white; */
             overflow: overlay;
           
         }
-        /* .settingPanel .funBtnlist>ul {
+        .settingPanel .funBtnlist>ul {
             width: 100%;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             justify-content: space-evenly;
+            align-items: center;
             padding-top: 28px;
             list-style: none;
             overflow: hidden;
-        } */
+        }
         .settingPanel .funBtnlist>ul li {
             position: relative;
-            width: 260px;    
-            height: 40px;
-            margin: 6px 0;
+            width: 280px;    
+            height: 50px;
+            margin: 10px 0;
             border: none;
             outline: none;
             font-size: 18px;
-            font-family: '楷体';
-            font-weight: bold;
-            letter-spacing: 10px;
-          
         }
         .settingPanel .funBtnlist>ul li>button{
             position: absolute;
@@ -879,19 +893,24 @@
             top: 0;
             width: inherit;
             height: inherit;
-            transition: all .4s linear;
-            cursor: pointer;
+            /* transition: all .4s linear; */
+            /* cursor: pointer; */
             background-color: rgb(93,127,254);
             color: white;
             border: 2px solid rgba(67, 242, 255,0);
-            border-radius: 20px;
+            border-radius: 50px;
+            font-size: 16px;
             cursor: pointer;
             transition: all .3s linear;
+            font-family: '思源黑体';
+            font-weight: bold;
+            letter-spacing:10px;
         }
       
         .settingPanel .funBtnlist>ul li>button:hover {
             border: 2px solid rgba(67, 242, 2551, 1);
             background-color:  rgba(93,127,254,.5);
+            box-shadow: 0 0 10px 1px rgba(93,127,254,.8);
         }
 
         .digitalArea table tr td {
@@ -927,6 +946,7 @@
             cursor: pointer;
             display: none;
             z-index: 9999;
+        
         }
 
         /* 桌面时间 */
@@ -1110,15 +1130,17 @@
         <div class="settingPanel">
             <div class="funBtnlist">
                 <ul>
-                    <li>
-                        <button class="closeBtn">关闭</button>
-                    </li>
+                    
                     <li>
                         <button class="wallpaperLoop">开启壁纸循环</button>
                     </li>
 
                     <li>
                         <button class="openBGtime">开启桌面时间</button>
+                    </li>
+                
+                    <li>
+                        <button class="closeBtn">关闭</button>
                     </li>
                 </ul>
 
@@ -1134,9 +1156,11 @@
                     <!-- 行 -->
                     <div class="line line_1">
                         <!-- 列 -->
-                        <div class="item item_camera" title="相机"></div> <!-- 相机 -->
-                        <div class="item item_calculator" title="计算器"></div> <!-- 计算器 -->
-                        <div class="item item_setting" title="计算器"></div> <!-- 设置 -->
+                        <div class="item item_camera" title="相机" style="--i:0"></div> <!-- 相机 -->
+                        <div class="item item_calculator" title="计算器" style="--i:1"></div> <!-- 计算器 -->
+                        <div class="item item_setting" title="计算器" style="--i:2"></div> <!-- 设置 -->
+                 
+                        
                         <!-- <div class="item"></div>
                         <div class="item"></div> -->
                     </div>
@@ -1154,12 +1178,13 @@
                         <div class="item"></div>
                     </div> -->
                 </li>
+                <!-- 第二页 -->
                 <li style="--i:1">
                     <div class="line line_4">
-                        <div class="item"></div>
-                        <div class="item"></div>
-                        <div class="item"></div>
-                        <div class="item"></div>
+                        <div class="item" style="--i:0"></div>
+                        <div class="item" style="--i:1"></div>
+                        <div class="item" style="--i:2"></div>
+                        <div class="item" style="--i:3"></div>
                     </div>
                 </li>
             </ul>
@@ -1201,6 +1226,10 @@
             let calculator = document.querySelector(".calculator");
             let item_calculator = document.querySelector(".item_calculator");
 
+            // 状态栏时间
+            let infoTime = document.querySelector(".info .time ");
+
+
             // 设置界面 
             let settingPanel = document.querySelector(".settingPanel");
 
@@ -1210,7 +1239,7 @@
 
             // let picNum = 32;  // 图库图片数量
 
-            let picNum = 13;  // 图库图片数量
+            let picNum = 18;  // 图库图片数量
             
             // 媒体流
             let mediaStream = null;
@@ -1294,6 +1323,7 @@
                 })
             }
             moveObj();
+
             let flag = false;
             let T = null;
             controller.addEventListener("mousedown",function() {
@@ -1344,8 +1374,14 @@
                 powerSpan[0].innerHTML = powers;
                 powerSpan[1].style.width = powers
                 // 是否正在充电，yes-充电
-                // let k = battery.charging ? "yes" : "no";
-                img.style.opacity = battery.charging ? "1" : "0";
+                setInterval(() => {
+                    let k = battery.charging ? "yes" : "no";
+                    img.style.opacity = battery.charging ? "1" : "0";
+                    powerSpan[1].style.backgroundColor = battery.charging ? "rgb(21, 255, 111)" : "rgb(255, 255, 255)";
+                     
+                }, 1000);
+                
+                
 
             });
 
@@ -1364,20 +1400,32 @@
                     bgtime.innerHTML = T + ":" + s;
                 }, 300);
 
-
                 // 下拉菜单栏
                 let flag = false;
                 info.addEventListener("mousedown", (e) => {
                     flag = true;
                     selectSetup.style.transition = "";
-                    document.body.addEventListener("mousemove", (e) => {
-
-                        let mY = e.clientY - box.offsetTop - selectSetup.offsetHeight;
-                        if (flag) {
-                            selectSetup.style.top = mY + "px";
-                        }
-                    })
+                    if (flag) {
+                        document.body.addEventListener("mousemove", (e) => {
+                            let mY = e.clientY - box.offsetTop - selectSetup.offsetHeight;
+                            if (mY >= 0) mY = 0;
+                            
+                            if (selectSetup.offsetTop > -540 && flag != false) {
+                                line.style.display = "block";
+                            } 
+                            
+                            // console.log(selectSetup.offsetTop);
+                            
+                            // if (selectSetup.offsetTop >= 0) infoTime.style.transform = "scale(" + 5 + ")";
+                            if (selectSetup.offsetTop <= -350) infoTime.style.transform = "scale(" + 1 + ")";
+                            if (selectSetup.offsetTop >= -350) infoTime.style.transform = "scale(" + 5 + ")";
+                            if (flag) {
+                                selectSetup.style.top = mY + "px";
+                            }
+                        })
+                    }
                 })
+             
 
                 document.body.addEventListener("mouseup", () => {
                     flag = false;
@@ -1388,6 +1436,7 @@
                     } else {
                         selectSetup.style.top = -100 + "%";
                         selectSetup.style.transition = "all .3s ease-in-out";
+
                     }
                 })
 
@@ -1409,6 +1458,7 @@
                 calculator.style.display = "none";
 
                 settingPanel.style.display = "none";
+                infoTime.style.transform = "scale(" + 1 + ")";
                 closeCameraFun();
             }
 
@@ -1424,11 +1474,14 @@
                 // 移入屏幕底部横线返回主屏
                 line.addEventListener("mousemove", () => {
                     returnMain();
-
+                    line.style.transform = "translateY(-10px)";
                     setTimeout(() => {
+                        line.style.transform = "translateY(0)";
                         line.style.display = "none"
                     }, 200);
                 })
+            
+
             }
             maskFun();
 
@@ -1679,7 +1732,7 @@
                                 // console.log(arrNum);
                                 for (let i = 1; i < arrNum.length; i++) {
                                     let num = parseFloat(arrNum[i]);
-                                    console.log(num);
+                                    // console.log(num);
                                     theSum /= num;
                                 }
                                 // toFixed() 将数字转换为字符串，并指定小数点后保留几位，不足用0补齐
@@ -1702,6 +1755,7 @@
             }
             deskTopFun();
 
+     
             // 导航栏模块函数
             function navFun() {
                 // line.style.display = "block"; 非主屏显示，否则不显示
@@ -1716,6 +1770,7 @@
                 // 图库
                 picFun();
                 function picFun() {
+                    let imgs = null;
                     nav.children[1].addEventListener("click", () => {
                         // ul.innerHTML = "";
                         albumArea.children[0].children[0].innerHTML = ""; // 在下次点击时清空ul列表，重新渲染
@@ -1737,10 +1792,11 @@
                         //     let img = document.createElement("img");
                         //     lis[i].appendChild(img);
                         // }
-                        let imgs = document.querySelectorAll("ul img");
+                        imgs = document.querySelectorAll("ul img");
                         for (let i = 0; i < imgs.length; i++) {
                             // imgs[i].src = "./tuku/" + i + ".jpg";
                             imgs[i].src = "./wallpaper/" + i + ".png";
+                            imgs[i].setAttribute("data-src", "./wallpaper/" + i + ".png");
                             imgs[i].addEventListener("click", () => {
                                 localStorage.setItem("index", i);
                                 // container.style.background = "url(" + imgs[localStorage.getItem("index")].src + ")";
@@ -1749,7 +1805,23 @@
                                 SetImage();
                             })
                         }
+
+
+                      
                     })
+                    // window.addEventListener('scroll',(e)=> {
+                    //     // ergodic();
+                    //     console.log(11);
+                        
+                    // });
+                    // function ergodic() {
+                    //     for (let i of imgs) {
+                    //         if(i.offsetTop <= window.innerHeight + window.scrollY) {
+                    //             let trueSrc = i.getAttribute("data-src");
+                    //             i.setAttribute("src",trueSrc);
+                    //         }
+                    //     }
+                    // }
                 }
 
 
@@ -1850,7 +1922,7 @@
                 let loop = null;
                 wallpaperLoop.addEventListener("click",function() {
                     let i = localStorage.getItem("index");
-                    isLoop = !isLoop;
+                    isLoop = !ivsLoop;
                     if (isLoop) {
                         wallpaperLoop.innerText = "关闭壁纸循环";
                         loop = setInterval(() => {
